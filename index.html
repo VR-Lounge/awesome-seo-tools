@@ -186,6 +186,15 @@
 
     .card-title a:hover { color: var(--accent-hover); text-decoration: underline; }
 
+    .card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .card-head .card-title { margin: 0 0 0.35rem; flex: 1; }
+    .card-head .help-trigger { flex-shrink: 0; margin-top: 0.1rem; }
+
     .card-desc {
       margin: 0 0 0.5rem;
       font-size: 0.9rem;
@@ -227,38 +236,213 @@
       transition: opacity 0.2s, visibility 0.2s, transform 0.15s;
     }
 
-    .to-top.visible {
+    .to-top-wrap {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 100;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+    }
+    .to-top-wrap.visible {
       opacity: 1;
       visibility: visible;
     }
-
+    .to-top { position: relative; bottom: auto; right: auto; }
     .to-top:hover { transform: scale(1.05); }
+
+    .help-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .help-wrap.block { display: flex; width: 100%; }
+    .help-trigger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 50%;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .help-trigger:hover {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      max-width: 520px;
+      width: 100%;
+      max-height: 85vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow);
+    }
+    .modal-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    .modal-desc {
+      padding: 0 1.25rem 0.75rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-body {
+      padding: 1rem 1.25rem;
+      overflow-y: auto;
+    }
+    .accordion-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 0.5rem;
+      overflow: hidden;
+    }
+    .accordion-item:last-child { margin-bottom: 0; }
+    .accordion-head {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      background: var(--bg-input);
+      border: none;
+      color: var(--text);
+      font-size: 0.9rem;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .accordion-head:hover { background: var(--bg); }
+    .accordion-head::after {
+      content: '+';
+      font-size: 1.1rem;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .accordion-item.open .accordion-head::after { content: '−'; }
+    .accordion-body {
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.25s ease-out;
+    }
+    .accordion-item.open .accordion-body { max-height: 80vh; }
+    .accordion-body-inner {
+      padding: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.9rem;
+      line-height: 1.55;
+      color: var(--text-muted);
+    }
+    .accordion-body-inner p { margin: 0 0 0.5rem; }
+    .accordion-body-inner p:last-child { margin-bottom: 0; }
+    .modal-close {
+      margin: 0 1.25rem 1rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .modal-close:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg);
+    }
   </style>
 </head>
 <body>
   <div class="layout">
     <header>
-      <h1>Каталог SEO-инструментов</h1>
+      <div class="help-wrap">
+        <h1>Каталог SEO-инструментов</h1>
+        <button type="button" class="help-trigger" data-help="about" title="Как пользоваться каталогом" aria-label="Подсказка">i</button>
+      </div>
       <p class="subtitle">Подборка инструментов для поисковой оптимизации и анализа сайтов</p>
       <div class="toolbar">
-        <div class="search-wrap">
+        <div class="search-wrap help-wrap block">
           <input type="text" id="search" placeholder="Поиск по названию и описанию..." autocomplete="off">
+          <button type="button" class="help-trigger" data-help="search" title="Инструкция: поиск" aria-label="Подсказка">i</button>
         </div>
         <div class="filters" id="toolbar-filters"></div>
-        <span class="counter" id="counter">Найдено: <strong>0</strong></span>
+        <div class="help-wrap">
+          <span class="counter" id="counter">Найдено: <strong>0</strong></span>
+          <button type="button" class="help-trigger" data-help="counter" title="Инструкция: счётчик и навигация" aria-label="Подсказка">i</button>
+        </div>
       </div>
     </header>
 
     <main>
       <aside class="sidebar">
-        <div class="sidebar-title">Категории</div>
+        <div class="help-wrap">
+          <span class="sidebar-title">Категории</span>
+          <button type="button" class="help-trigger" data-help="filters" title="Инструкция: фильтр по категориям" aria-label="Подсказка">i</button>
+        </div>
         <div id="sidebar-filters"></div>
       </aside>
-      <section class="cards" id="cards"></section>
+      <section class="cards-section">
+        <div class="help-wrap" style="margin-bottom: 0.5rem;">
+          <span class="sidebar-title">Инструменты</span>
+          <button type="button" class="help-trigger" data-help="cards" title="Инструкция: карточки инструментов" aria-label="Подсказка">i</button>
+        </div>
+        <div class="cards" id="cards"></div>
+      </section>
     </main>
   </div>
 
-  <button type="button" class="to-top" id="toTop" title="Наверх" aria-label="Наверх">↑</button>
+  <div class="to-top-wrap" id="toTopWrap">
+    <button type="button" class="to-top" id="toTop" title="Наверх" aria-label="Наверх">↑</button>
+    <button type="button" class="help-trigger" data-help="totop" title="Инструкция: кнопка «Наверх»" aria-label="Подсказка">i</button>
+  </div>
+
+  <div class="modal-overlay" id="helpModal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+      <div class="modal-header" id="modalTitle"></div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="modal-body" id="modalAccordion"></div>
+      <button type="button" class="modal-close" id="modalClose">Закрыть</button>
+    </div>
+  </div>
 
   <script>
     const CATEGORIES = {
@@ -383,12 +567,225 @@
       { name: 'GEO/AEO Tracker', url: 'https://github.com/danishashko/geo-aeo-tracker', desc: 'Open source дашборд видимости в AI: упоминания бренда, цитирования, BYOK, self-hosted.', cat: 'misc' }
     ];
 
+    const TOOL_HELP = {
+      'Ahrefs': {
+        title: 'Ahrefs',
+        desc: 'Универсальный SEO-инструмент: ключевые слова, обратные ссылки, аудит сайта, отслеживание позиций. Подходит для комплексного продвижения и анализа конкурентов.',
+        accordion: [
+          { title: 'Если нужно проверить обратные ссылки на свой или чужой сайт', body: 'Введите домен в поле Site Explorer. Откройте отчёт «Backlinks» — увидите список ссылающихся страниц, доноров и якоря. Фильтруйте по DR, типу ссылки и языку. Экспортируйте список при необходимости.' },
+          { title: 'Если нужно подобрать ключевые слова', body: 'Используйте раздел «Keywords» или бесплатный Keywords Generator. Введите запрос — получите идеи с объёмом поиска и сложностью. Анализируйте ключевые слова конкурентов через Site Explorer → «Organic Keywords».' },
+          { title: 'Если нужен технический аудит сайта', body: 'В Site Audit добавьте проект и запустите краул. Сервис покажет ошибки, предупреждения и рекомендации по страницам. Исправляйте критические пункты в первую очередь.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите данные по ссылкам (в т.ч. новые и потерянные), позициям по ключевым словам, трафику и контенту. Большинство отчётов доступны по подписке; бесплатно — ограниченное число запросов.' }
+        ]
+      },
+      'SEMrush': {
+        title: 'SEMrush',
+        desc: 'Платформа для SEO, контент-маркетинга, исследования конкурентов и рекламы. Объединяет ключевые слова, трафик, ссылки и рекламные данные.',
+        accordion: [
+          { title: 'Если нужно исследовать ключевые слова', body: 'Откройте Keyword Magic Tool или введите домен в поле анализа. Введите семантическое ядро или URL — получите подсказки ключевых слов с объёмом, сложностью и CPC. Группируйте по интенту и экспортируйте.' },
+          { title: 'Если нужно проанализировать конкурента', body: 'В разделе «Competitors» или при анализе домена изучите органический трафик, топ ключевых слов и рекламные объявления. Сравните несколько доменов в одном отчёте.' },
+          { title: 'Если нужен аудит сайта', body: 'Добавьте сайт в проект, запустите Site Audit. Просмотрите ошибки по категориям (индексация, ссылки, контент, скорость). Выполняйте рекомендации и перезапускайте проверку.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите данные по видимости, трафику, ключевым словам и рекламе. Доступны отчёты, экспорт и интеграции. Полный функционал — по подписке.' }
+        ]
+      },
+      'Google Keyword Planner': {
+        title: 'Google Keyword Planner',
+        desc: 'Бесплатный инструмент Google Ads для подбора ключевых слов и оценки частоты запросов. Нужен аккаунт Google Реклама.',
+        accordion: [
+          { title: 'Если нужно получить идеи ключевых слов', body: 'Войдите в Google Ads → Инструменты → Планировщик ключевых слов. Выберите «Найти ключевые слова». Введите запросы или URL сайта — сервис покажет идеи с диапазонами объёма поиска и конкуренции.' },
+          { title: 'Если объёмы показываются как диапазоны', body: 'Это нормально: точные цифры Google даёт только при активной рекламной кампании. Используйте диапазоны для сравнения запросов между собой и приоритизации.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите списки ключевых слов с оценкой частоты запросов и конкуренции. Данные можно сохранить в план и использовать для контента и SEO без обязательного запуска рекламы.' }
+        ]
+      },
+      'Google Search Console': {
+        title: 'Google Search Console',
+        desc: 'Бесплатный инструмент Google для мониторинга показов и кликов в поиске, индексации и технических проблем сайта.',
+        accordion: [
+          { title: 'Если нужно добавить сайт', body: 'Войдите в search.google.com/search-console. Добавьте ресурс по домену или по префиксу URL. Подтвердите владение через DNS, HTML-файл или тег в коде. После проверки начнут собираться данные.' },
+          { title: 'Если видите падение показов или индексации', body: 'Откройте отчёты «Эффективность» и «Покрытие» (или «Индексирование»). Проверьте ошибки и исключённые страницы. Исправьте технические проблемы и запросите переобход важных URL.' },
+          { title: 'Если нужны данные по запросам и страницам', body: 'В «Эффективность» смотрите запросы, страницы, страны и устройства. Фильтруйте по датам. Используйте эти данные для планирования контента и доработки страниц.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите реальные данные из Google: показы, клики, средняя позиция, индекс страниц и список проблем. Все данные бесплатны; обновление — с задержкой в 1–3 дня.' }
+        ]
+      },
+      'Screaming Frog SEO Spider': {
+        title: 'Screaming Frog SEO Spider',
+        desc: 'Десктопный краулер для технического аудита сайта: ссылки, заголовки, мета-теги, дубли, битые ссылки и др.',
+        accordion: [
+          { title: 'Если запускаете краул впервые', body: 'Введите URL в строку вверху и нажмите Start. Программа обойдёт сайт и соберёт данные по каждой странице. Для больших сайтов настройте лимит URL или используйте список из файла.' },
+          { title: 'Если нужно найти битые ссылки или дубли', body: 'После краула откройте вкладки «Response Codes» (4xx/5xx), «Duplicate» (дубликаты контента или заголовков). Экспортируйте списки в CSV для правок на сайте.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите полную карту сайта, коды ответов, мета-теги, размер страниц и список проблем. Бесплатно — до 500 URL; лицензия снимает ограничение.' }
+        ]
+      },
+      'SurferSEO': {
+        title: 'SurferSEO',
+        desc: 'Сервис для оптимизации контента под поиск: анализ страниц конкурентов, рекомендации по словам и структуре.',
+        accordion: [
+          { title: 'Если нужно оптимизировать готовую страницу', body: 'Введите URL страницы и целевой запрос. Сервис сравнит страницу с ТОП-10 и выдаст рекомендации: какие слова добавить, объём текста, заголовки. Вносите правки в контент по списку.' },
+          { title: 'Если пишете статью с нуля', body: 'Используйте Content Editor: введите запрос и при необходимости URL конкурента. Получите план и список ключевых слов. Пишите текст в редакторе или в своей CMS, ориентируясь на счётчик релевантности.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите оценку страницы по 100-балльной шкале и чёткий список доработок. После внедрения рекомендаций оценка растёт — можно довести до «оптимально».' }
+        ]
+      },
+      'SerpBear': {
+        title: 'SerpBear',
+        desc: 'Open source трекер позиций в поиске. Устанавливается на свой сервер, подходит для самостоятельного контроля ключевых слов.',
+        accordion: [
+          { title: 'Если устанавливаете на свой сервер', body: 'Разверните приложение по инструкции на docs.serpbear.com (Docker или вручную). Создайте аккаунт, добавьте домен и ключевые слова. Настройте расписание проверок и при необходимости API поиска.' },
+          { title: 'Если нужно смотреть позиции и историю', body: 'Откройте дашборд — увидите текущие позиции по ключевым словам и графики изменений. Фильтруйте по группе или по движению. Экспортируйте отчёты при необходимости.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите ежедневный или еженедельный замер позиций без зависимости от облачного сервиса. Данные хранятся у вас; за API поиска (Google и др.) может потребоваться отдельная подписка.' }
+        ]
+      },
+      'Yoast SEO': {
+        title: 'Yoast SEO',
+        desc: 'Плагин WordPress для оптимизации записей и страниц: мета-теги, читаемость, ключевые слова и подсказки по контенту.',
+        accordion: [
+          { title: 'Если настраиваете плагин впервые', body: 'Установите и активируйте Yoast SEO. Пройдите мастер настройки: укажите тип сайта и подключите Search Console при необходимости. В настройках задайте заголовок и описание по умолчанию для сайта.' },
+          { title: 'Если редактируете запись или страницу', body: 'Прокрутите вниз до блока Yoast. Введите фокусное ключевое слово. Заполните мета-заголовок и описание. Следуйте подсказкам по читаемости и SEO — добивайтесь зелёных индикаторов.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите подсказки прямо в редакторе: как улучшить заголовок, описание и контент. Плагин помогает держать мета-теги и структуру в порядке без ручной проверки в сторонних сервисах.' }
+        ]
+      },
+      'BrightLocal': {
+        title: 'BrightLocal',
+        desc: 'Платформа для локального SEO: мониторинг видимости, отзывов, цитаций и аудит карточки компании.',
+        accordion: [
+          { title: 'Если добавляете бизнес впервые', body: 'Создайте локацию: название, адрес, телефон, сайт. Сервис проверит наличие и корректность цитаций в каталогах. Заполните карточку полностью и привяжите Google Business при необходимости.' },
+          { title: 'Если нужно отслеживать отзывы и рейтинг', body: 'Подключите платформы отзывов в настройках. BrightLocal будет собирать отзывы и показывать рейтинг. Настройте уведомления о новых отзывах, чтобы отвечать вовремя.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите отчёты по локальной видимости, цитациям и отзывам, а также рекомендации по улучшению. Подходит для сетей и агентств, работающих с локальными клиентами.' }
+        ]
+      },
+      'GTmetrix': {
+        title: 'GTmetrix',
+        desc: 'Сервис анализа скорости загрузки страниц: время отклика, размер ресурсов, Core Web Vitals и рекомендации.',
+        accordion: [
+          { title: 'Если запускаете тест страницы', body: 'Введите URL в поле на главной и нажмите «Test». Выберите регион и устройство при необходимости. Дождитесь окончания загрузки — сервис покажет отчёт с оценками и водопадом запросов.' },
+          { title: 'Если оценки низкие', body: 'Откройте вкладки «Recommendations» и «Waterfall». Устраняйте тяжёлые ресурсы, включите сжатие и кэш, оптимизируйте изображения. Перезапустите тест после изменений на сайте.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите оценки скорости (в т.ч. PageSpeed и YSlow), метрики LCP/FID/CLS и список конкретных рекомендаций. Бесплатный тариф ограничен по частоте проверок.' }
+        ]
+      }
+    };
+
     const searchEl = document.getElementById('search');
     const cardsEl = document.getElementById('cards');
     const counterEl = document.getElementById('counter');
     const toTopEl = document.getElementById('toTop');
+    const toTopWrap = document.getElementById('toTopWrap');
     const sidebarFilters = document.getElementById('sidebar-filters');
     const toolbarFilters = document.getElementById('toolbar-filters');
+    const helpModal = document.getElementById('helpModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalAccordion = document.getElementById('modalAccordion');
+    const modalClose = document.getElementById('modalClose');
+
+    const HELP_CONTENT = {
+      about: {
+        title: 'О каталоге',
+        desc: 'Каталог помогает быстро найти подходящие SEO-инструменты для продвижения и оптимизации сайтов. Используйте его, когда нужно подобрать сервисы по ключевым словам, ссылкам, контенту, техническому или локальному SEO.',
+        accordion: [
+          {
+            title: 'Если вы впервые на сайте',
+            body: 'Начните с кнопки «Универсальные SEO-инструменты» — там сервисы «всё в одном». Если нужна узкая задача (например, только ключевые слова или только бэклинки), выберите соответствующую категорию в блоке «Категории» или в панели сверху.'
+          },
+          {
+            title: 'Если нужно найти инструмент по названию или теме',
+            body: 'Введите слово или фразу в поле поиска вверху страницы. Список карточек обновится сразу. Если результатов нет — очистите поиск или смените категорию.'
+          },
+          {
+            title: 'Если хотите открыть сайт инструмента',
+            body: 'Нажмите на название инструмента на карточке — откроется официальный сайт в новой вкладке. Описание на карточке подсказывает, для чего этот инструмент.'
+          }
+        ]
+      },
+      search: {
+        title: 'Поиск',
+        desc: 'Поиск в реальном времени по названию и описанию инструментов. Подходит, когда вы знаете имя сервиса или ищете по задаче (например, «ключевые слова», «бэклинки», «скорость»).',
+        accordion: [
+          {
+            title: 'Если вы вводите текст в поле поиска',
+            body: 'Список инструментов сужается сразу, без нажатия кнопки. Ищется по названию и по описанию. Регистр и часть букв (например, «ключ» вместо «ключевые») не важны.'
+          },
+          {
+            title: 'Если после ввода ничего не отображается',
+            body: 'Значит, ни один инструмент не подошёл под запрос. Очистите поле поиска (удалите текст) или измените запрос. Проверьте также, что выбрана подходящая категория — при активной категории показываются только инструменты из неё.'
+          },
+          {
+            title: 'Если хотите сбросить поиск',
+            body: 'Удалите весь текст из поля — снова появятся все инструменты выбранной категории.'
+          }
+        ]
+      },
+      filters: {
+        title: 'Фильтр по категориям',
+        desc: 'Позволяет показывать только инструменты нужного типа: универсальные, ключевые слова, бэклинки, контент, позиции, техническое SEO, локальное SEO, расширения, соцсети или разное.',
+        accordion: [
+          {
+            title: 'Если нужны инструменты только одной темы',
+            body: 'Нажмите на название категории в боковой панели слева или на одну из кнопок в верхней панели. Активная кнопка подсвечивается. Список карточек обновится сразу.'
+          },
+          {
+            title: 'Если хотите видеть все инструменты без фильтра',
+            body: 'Выберите категорию «Универсальные SEO-инструменты» в начале списка — она показывает все инструменты каталога (фильтр по типу отключён).'
+          },
+          {
+            title: 'Если комбинируете категорию и поиск',
+            body: 'Сначала выбирается категория, затем внутри неё работает поиск по тексту. Например: выбрали «Оптимизация контента» и ввели «AI» — увидите только контентные инструменты, в названии или описании которых есть «AI».'
+          }
+        ]
+      },
+      counter: {
+        title: 'Счётчик и навигация',
+        desc: 'Счётчик «Найдено» показывает, сколько инструментов отображается сейчас с учётом поиска и категории. Кнопка «Наверх» появляется при прокрутке вниз и возвращает к началу страницы.',
+        accordion: [
+          {
+            title: 'Если видите «Найдено: 0»',
+            body: 'Ни один инструмент не попал под текущий поиск или категорию. Измените текст в поле поиска или выберите другую категорию (например, «Универсальные SEO-инструменты»).'
+          },
+          {
+            title: 'Если число «Найдено» не совпадает с ожиданием',
+            body: 'Число обновляется при каждом изменении поиска или категории. Оно показывает только те карточки, которые сейчас на экране. Если сбросите поиск и выберете «Универсальные SEO-инструменты», увидите общее количество инструментов в каталоге.'
+          },
+          {
+            title: 'Если нужно быстро вернуться к началу страницы',
+            body: 'Прокрутите страницу вниз — справа внизу появится круглая кнопка со стрелкой вверх. Нажмите её — страница плавно прокрутится вверх. Кнопка исчезает, когда вы уже вверху.'
+          }
+        ]
+      },
+      cards: {
+        title: 'Карточки инструментов',
+        desc: 'Каждая карточка — это один инструмент: название (ссылка на сайт), краткое описание и бейдж категории. Используйте карточки, чтобы быстро сравнить сервисы и перейти на нужный.',
+        accordion: [
+          {
+            title: 'Если нужно перейти на сайт инструмента',
+            body: 'Нажмите на название инструмента (синяя ссылка вверху карточки). Сайт откроется в новой вкладке. Остальные элементы карточки (описание, бейдж) не являются ссылками.'
+          },
+          {
+            title: 'Если хотите понять, для чего инструмент',
+            body: 'Прочитайте текст под названием — это краткое описание возможностей. Цветной бейдж под описанием показывает категорию (например, «Исследование ключевых слов», «Технический SEO»).'
+          },
+          {
+            title: 'Если на экране много карточек',
+            body: 'Используйте поиск или фильтр по категориям, чтобы сузить список. Счётчик «Найдено» подскажет, сколько карточек отображается.'
+          }
+        ]
+      },
+      totop: {
+        title: 'Кнопка «Наверх»',
+        desc: 'Возвращает к началу страницы одним нажатием. Появляется после прокрутки вниз, чтобы не загромождать экран, когда вы вверху.',
+        accordion: [
+          {
+            title: 'Если вы прокрутили страницу вниз',
+            body: 'Справа внизу появится круглая синяя кнопка со стрелкой вверх. Нажмите её — страница плавно прокрутится к заголовку и поиску.'
+          },
+          {
+            title: 'Если кнопки не видно',
+            body: 'Значит, вы ещё не прокрутили страницу достаточно вниз (порог — около 400 пикселей). Прокрутите чуть ниже — кнопка появится.'
+          },
+          {
+            title: 'Если вы уже вверху страницы',
+            body: 'Кнопка «Наверх» автоматически скрывается, чтобы не мешать. При следующей прокрутке вниз она снова появится.'
+          }
+        ]
+      }
+    };
 
     let currentCategory = 'all';
     let searchQuery = '';
@@ -424,6 +821,72 @@
       });
     }
 
+    function getDefaultToolHelp(tool) {
+      const catLabel = CATEGORIES[tool.cat];
+      const byCat = {
+        all: [
+          { title: 'Если нужен комплексный SEO-анализ сайта', body: 'Перейдите на сайт инструмента по ссылке в карточке. Зарегистрируйтесь или войдите. Добавьте свой домен в проект — сервис начнёт сбор данных. Зайдите в разделы «Обзор», «Ключевые слова», «Ссылки» или «Аудит» в зависимости от задачи.' },
+          { title: 'Если хотите сравнить себя с конкурентами', body: 'Введите домен конкурента в соответствующее поле (часто «Competitors» или «Конкуренты»). Вы получите сравнение по видимости, ключевым словам и ссылкам. Используйте отчёты для планирования стратегии.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите дашборд с метриками (трафик, позиции, ссылки), списки ключевых слов, рекомендации по контенту и технике. Часть данных доступна бесплатно; полный функционал — по подписке.' }
+        ],
+        keywords: [
+          { title: 'Если нужно подобрать ключевые слова', body: 'Введите тематику, слово или URL страницы в главное поле. Сервис покажет идеи ключевых слов, объём поиска и сложность. Фильтруйте по типу (информационные, коммерческие) и по языку/региону.' },
+          { title: 'Если нужны длинные (long-tail) запросы', body: 'Используйте подсказки из автодополнения или раздел «Вопросы» / «Questions». Сохраните выбранные ключевые слова в список или экспортируйте в CSV для дальнейшей работы в контенте.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите список ключевых слов с оценкой частоты запросов и конкуренции. На основе этого можно планировать статьи и оптимизировать страницы под целевые запросы.' }
+        ],
+        backlinks: [
+          { title: 'Если нужно проверить обратные ссылки на сайт', body: 'Введите свой домен или URL страницы. Сервис покажет список ссылающихся сайтов, их метрики (DR, DA и т.п.) и якоря. Используйте фильтры по типу ссылок и по качеству.' },
+          { title: 'Если нужно найти возможности для новых ссылок', body: 'Изучите отчёт по конкурентам или используйте раздел «Link Building» / «Построение ссылок». Сервис подскажет перспективные сайты и контакты. Отправляйте запросы на размещение по предложенным шаблонам.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите список бэклинков, графики динамики, оценку токсичности и рекомендации по отказу от плохих ссылок или наращиванию хороших.' }
+        ],
+        content: [
+          { title: 'Если нужно оптимизировать текст под поиск', body: 'Введите целевой запрос и URL или текст страницы. Сервис покажет рекомендуемые слова, структуру и объём. Вносите правки в контент по подсказкам и перепроверяйте оценку.' },
+          { title: 'Если создаёте статью с нуля', body: 'Задайте тему или ключевое слово. Инструмент предложит план, заголовки и ключевые фразы. Пишите или генерируйте текст в редакторе, ориентируясь на выдаваемые метрики (релевантность, охват).' },
+          { title: 'Какой результат ожидать', body: 'Вы получите оценку соответствия контента запросу, список недостающих слов и рекомендации по доработке. После правок оценка растёт — можно довести материал до «оптимального» уровня.' }
+        ],
+        rank: [
+          { title: 'Если нужно отслеживать позиции сайта', body: 'Добавьте домен и список ключевых слов (или импортируйте из файла). Укажите регион и при необходимости устройство. Сервис начнёт ежедневный или еженедельный замер позиций в поиске.' },
+          { title: 'Если позиции упали или выросли', body: 'Откройте отчёт по ключевому слову или по группе. Изучите график и таблицу изменений. Сопоставьте даты с правками на сайте или действиями конкурентов — это поможет понять причину.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите таблицу и графики позиций по каждому запросу, расчёт видимости и оповещения о значимых изменениях. Данные можно экспортировать для отчётов.' }
+        ],
+        technical: [
+          { title: 'Если нужен технический аудит сайта', body: 'Введите URL сайта или загрузите список страниц. Запустите краулинг или проверку. Дождитесь окончания — сервис проанализирует заголовки, ссылки, скорость, индексацию и типичные ошибки.' },
+          { title: 'Если видите ошибки или предупреждения', body: 'Откройте отчёт по категориям (битые ссылки, дубли, мета-теги и т.д.). Исправьте проблемы на сайте по приоритету. Перезапустите проверку, чтобы убедиться, что ошибки исчезли.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите список проблем с указанием страниц и рекомендациями по исправлению. После доработок индексация и ранжирование могут улучшиться.' }
+        ],
+        local: [
+          { title: 'Если продвигаете локальный бизнес', body: 'Добавьте название компании и адрес или привяжите аккаунт Google Business. Сервис покажет видимость в локальной выдаче, отзывы и цитаты. Заполните карточку компании и следите за метриками.' },
+          { title: 'Если нужно улучшить локальные позиции', body: 'Используйте рекомендации по NAP (название, адрес, телефон), фотографиям и отзывам. Исправьте несоответствия в каталогах. Отслеживайте позиции по запросам с геопривязкой.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите оценку локальной видимости, список цитаций, мониторинг отзывов и подсказки по улучшению карточки и ранжирования в локальной выдаче.' }
+        ],
+        extensions: [
+          { title: 'Если установили расширение в браузер', body: 'Откройте нужную страницу или выдачу поиска. Нажмите иконку расширения или откройте панель — появятся метрики страницы, ключевые слова или быстрые проверки. Используйте без перехода на внешний сайт.' },
+          { title: 'Если нужен быстрый отчёт по странице', body: 'Находясь на странице, запустите проверку (часто одна кнопка). Расширение покажет заголовки, мета-описание, ссылки или оценку SEO. Экспортируйте отчёт при необходимости.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите данные по текущей странице или SERP прямо в браузере: метрики, подсказки по доработке, проверка редиректов и мета-тегов без перехода в отдельный сервис.' }
+        ],
+        social: [
+          { title: 'Если нужно настроить превью при расшаривании ссылки', body: 'Подключите API или встройте виджет на сайт. Укажите URL страницы — сервис сгенерирует Open Graph изображение и мета-теги. Вставьте сгенерированный код в шаблон или используйте API при публикации.' },
+          { title: 'Если превью отображается неправильно', body: 'Проверьте, что на странице прописаны og:image, og:title, og:description. Используйте отладчики Facebook/Telegram/VK для проверки. Перегенерируйте изображение при смене контента.' },
+          { title: 'Какой результат ожидать', body: 'При публикации ссылки в соцсетях и мессенджерах будет показываться нужная картинка и описание — больше кликов и узнаваемости бренда.' }
+        ],
+        misc: [
+          { title: 'Если нужно проверить скорость или производительность', body: 'Введите URL страницы и запустите тест. Сервис загрузит страницу и измерит время отклика, размер ресурсов и метрики (LCP, FID, CLS). Дождитесь окончания анализа.' },
+          { title: 'Если видите низкие оценки', body: 'Откройте рекомендации в отчёте: сжатие изображений, кэш, минификация CSS/JS, CDN. Внедрите изменения на сайте и перезапустите тест — оценки должны вырасти.' },
+          { title: 'Какой результат ожидать', body: 'Вы получите отчёт по скорости загрузки, Core Web Vitals и советы по улучшению. Быстрый сайт лучше ранжируется и даёт лучший опыт пользователям.' }
+        ]
+      };
+      const accordion = byCat[tool.cat] || byCat.all;
+      return {
+        title: tool.name,
+        desc: tool.desc + ' Ниже — как пользоваться и чего ожидать от сервиса.',
+        accordion
+      };
+    }
+
+    function getToolHelp(tool) {
+      return TOOL_HELP[tool.name] || getDefaultToolHelp(tool);
+    }
+
     function renderCards(list) {
       if (list.length === 0) {
         cardsEl.innerHTML = '<p class="no-results">По вашему запросу ничего не найдено. Измените поиск или категорию.</p>';
@@ -431,11 +894,21 @@
       }
       cardsEl.innerHTML = list.map(t => `
         <article class="card" data-category="${t.cat}">
-          <h3 class="card-title"><a href="${t.url}" target="_blank" rel="noopener">${escapeHtml(t.name)}</a></h3>
+          <div class="card-head">
+            <h3 class="card-title"><a href="${t.url}" target="_blank" rel="noopener">${escapeHtml(t.name)}</a></h3>
+            <button type="button" class="help-trigger card-help-trigger" data-tool-name="${escapeHtml(t.name)}" title="Инструкция по использованию" aria-label="Инструкция">i</button>
+          </div>
           <p class="card-desc">${escapeHtml(t.desc)}</p>
           <span class="card-badge">${escapeHtml(CATEGORIES[t.cat])}</span>
         </article>
       `).join('');
+      cardsEl.querySelectorAll('.card-help-trigger').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const tool = TOOLS.find(x => x.name === btn.getAttribute('data-tool-name'));
+          if (tool) openToolHelp(tool);
+        });
+      });
     }
 
     function escapeHtml(s) {
@@ -456,11 +929,62 @@
     });
 
     window.addEventListener('scroll', () => {
-      toTopEl.classList.toggle('visible', window.scrollY > 400);
+      toTopWrap.classList.toggle('visible', window.scrollY > 400);
     });
 
     toTopEl.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    function fillModalAndOpen(data) {
+      modalTitle.textContent = data.title;
+      modalDesc.textContent = data.desc;
+      modalAccordion.innerHTML = data.accordion.map((item) => `
+        <div class="accordion-item">
+          <button type="button" class="accordion-head">${escapeHtml(item.title)}</button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner"><p>${escapeHtml(item.body)}</p></div>
+          </div>
+        </div>
+      `).join('');
+      modalAccordion.querySelectorAll('.accordion-item').forEach(el => {
+        const head = el.querySelector('.accordion-head');
+        head.addEventListener('click', () => {
+          const wasOpen = el.classList.contains('open');
+          modalAccordion.querySelectorAll('.accordion-item').forEach(other => other.classList.remove('open'));
+          if (!wasOpen) el.classList.add('open');
+        });
+      });
+      helpModal.classList.add('open');
+      helpModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function openHelp(key) {
+      const data = HELP_CONTENT[key];
+      if (!data) return;
+      fillModalAndOpen(data);
+    }
+
+    function openToolHelp(tool) {
+      const data = getToolHelp(tool);
+      if (!data) return;
+      fillModalAndOpen(data);
+    }
+
+    function closeHelp() {
+      helpModal.classList.remove('open');
+      helpModal.setAttribute('aria-hidden', 'true');
+    }
+
+    document.querySelectorAll('.help-trigger').forEach(btn => {
+      btn.addEventListener('click', () => openHelp(btn.getAttribute('data-help')));
+    });
+    modalClose.addEventListener('click', closeHelp);
+    helpModal.addEventListener('click', (e) => {
+      if (e.target === helpModal) closeHelp();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && helpModal.classList.contains('open')) closeHelp();
     });
 
     renderFilters(sidebarFilters, false);
