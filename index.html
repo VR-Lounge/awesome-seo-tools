@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Подборка лучших SEO-инструментов: исследование ключевых слов, анализ ссылок, оптимизация контента, технический и локальный SEO. Каталог на русском языке для продвижения сайтов в РФ и СНГ.">
+  <title>Каталог SEO-инструментов для продвижения и оптимизации сайтов</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --bg-card: #161b22;
+      --bg-input: #21262d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --accent-hover: #79b8ff;
+      --success: #3fb950;
+      --radius: 8px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    .layout {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    header {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      margin: 1rem 0;
+    }
+
+    .search-wrap {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .search-wrap input::placeholder { color: var(--text-muted); }
+    .search-wrap input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.2);
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 0.9rem;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .filter-btn:hover {
+      background: var(--bg-card);
+      border-color: var(--accent);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg);
+    }
+
+    .counter {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-left: auto;
+    }
+
+    .counter strong { color: var(--success); }
+
+    main {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      main { grid-template-columns: 1fr; }
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 1rem;
+      height: fit-content;
+    }
+
+    .sidebar-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar .filter-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      margin-bottom: 0.25rem;
+    }
+
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-content: start;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 380px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      box-shadow: var(--shadow);
+    }
+
+    .card-title {
+      margin: 0 0 0.35rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+
+    .card-title a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .card-title a:hover { color: var(--accent-hover); text-decoration: underline; }
+
+    .card-desc {
+      margin: 0 0 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .card-badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      background: rgba(88, 166, 255, 0.15);
+      color: var(--accent);
+      border-radius: 4px;
+      font-size: 0.75rem;
+    }
+
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+    }
+
+    .to-top {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 44px;
+      height: 44px;
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.25rem;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s, transform 0.15s;
+    }
+
+    .to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .to-top:hover { transform: scale(1.05); }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <header>
+      <h1>Каталог SEO-инструментов</h1>
+      <p class="subtitle">Подборка инструментов для поисковой оптимизации и анализа сайтов</p>
+      <div class="toolbar">
+        <div class="search-wrap">
+          <input type="text" id="search" placeholder="Поиск по названию и описанию..." autocomplete="off">
+        </div>
+        <div class="filters" id="toolbar-filters"></div>
+        <span class="counter" id="counter">Найдено: <strong>0</strong></span>
+      </div>
+    </header>
+
+    <main>
+      <aside class="sidebar">
+        <div class="sidebar-title">Категории</div>
+        <div id="sidebar-filters"></div>
+      </aside>
+      <section class="cards" id="cards"></section>
+    </main>
+  </div>
+
+  <button type="button" class="to-top" id="toTop" title="Наверх" aria-label="Наверх">↑</button>
+
+  <script>
+    const CATEGORIES = {
+      all: 'Универсальные SEO-инструменты',
+      keywords: 'Исследование ключевых слов',
+      backlinks: 'Анализ обратных ссылок',
+      content: 'Оптимизация контента',
+      rank: 'Отслеживание позиций',
+      technical: 'Технический SEO',
+      local: 'Локальный SEO',
+      extensions: 'SEO-расширения для браузера',
+      social: 'Социальные сети и Open Graph',
+      misc: 'Разное'
+    };
+
+    const TOOLS = [
+      { name: 'Ahrefs', url: 'https://ahrefs.com/', desc: 'Всё необходимое для роста позиций и трафика.', cat: 'all' },
+      { name: 'SEMrush', url: 'https://www.semrush.com/lp/keyword-research-b/', desc: 'SEO, контент-маркетинг, конкуренты, PPC и соцсети в одной платформе.', cat: 'all' },
+      { name: 'Moz Pro', url: 'https://moz.com/', desc: 'Данные и софт для роста трафика и видимости в поиске.', cat: 'all' },
+      { name: 'Serpstat', url: 'https://serpstat.com/', desc: 'Платформа для управления SEO.', cat: 'all' },
+      { name: 'SERanking', url: 'https://seranking.com/', desc: 'Все-in-one SEO-платформа для агентств.', cat: 'all' },
+      { name: 'Mangools', url: 'https://mangools.com/', desc: 'Набор SEO-инструментов.', cat: 'all' },
+      { name: 'SpyFu', url: 'https://www.spyfu.com/', desc: 'SEO и PPC-анализ, история, конкуренты, бэклинки.', cat: 'all' },
+      { name: 'Ubersuggest', url: 'https://neilpatel.com/ubersuggest/', desc: 'Показывает, как выигрывать в SEO и получать трафик.', cat: 'all' },
+      { name: 'Seodity', url: 'https://seodity.com/', desc: 'Полный SEO-набор для роста бизнеса.', cat: 'all' },
+      { name: 'WebCEO', url: 'https://www.webceo.com/', desc: 'SEO и цифровой маркетинг: аналитика, отчёты, лиды.', cat: 'all' },
+      { name: 'Zutrix', url: 'https://zutrix.com/', desc: 'Инструменты для увеличения трафика.', cat: 'all' },
+      { name: 'BrightEdge', url: 'https://www.brightedge.com/', desc: 'Корпоративная SEO-платформа для контента и конкуренции.', cat: 'all' },
+      { name: 'CognitiveSEO', url: 'https://cognitiveseo.com/', desc: 'Анализ бэклинков и аудит контента для SEO.', cat: 'all' },
+      { name: 'Keyword Insights', url: 'https://www.keywordinsights.ai/', desc: 'Создавайте контент быстрее с помощью AI для SEO.', cat: 'all' },
+      { name: 'Clicks.so', url: 'https://www.clicks.so/', desc: 'Доступный SEO-инструмент для новичков.', cat: 'all' },
+      { name: 'SEO Utils', url: 'https://seoutils.app/', desc: 'Десктопное SEO-приложение для macOS, Windows и Linux.', cat: 'all' },
+      { name: 'DiagnoSEO', url: 'https://diagnoseo.com/', desc: 'AI-инструменты для SEO и контент-маркетинга, плагин для WordPress.', cat: 'all' },
+      { name: 'Telescope', url: 'https://withtelescope.com/', desc: 'Доступный SEO-набор: ключевые слова, аудит, трекинг, внутренние ссылки.', cat: 'all' },
+      { name: 'DAXRM', url: 'https://www.daxrm.com/', desc: 'CRM для цифрового маркетинга: SEO, PPC, отчёты, команда.', cat: 'all' },
+      { name: 'SEO Toolbox', url: 'https://seotoolbox.site', desc: 'SEO-платформа с постраничным анализом и AI-отчётами.', cat: 'all' },
+      { name: 'Bishopi.io', url: 'https://www.bishopi.io/', desc: 'SEO и аналитика доменов корпоративного уровня.', cat: 'all' },
+      { name: 'Google Keyword Planner', url: 'https://ads.google.com/home/tools/keyword-planner/', desc: 'Бесплатный инструмент Google Ads: идеи ключевых слов и оценки трафика.', cat: 'keywords' },
+      { name: 'Keyword Tool', url: 'https://keywordtool.io/', desc: 'Поиск ключевых слов через Google Autocomplete.', cat: 'keywords' },
+      { name: 'WordStream', url: 'https://www.wordstream.com/keywords', desc: 'Поиск и приоритизация лучших ключевых слов.', cat: 'keywords' },
+      { name: 'Ahrefs Keywords Generator', url: 'https://ahrefs.com/keyword-generator', desc: 'Бесплатный генератор идей ключевых слов от Ahrefs.', cat: 'keywords' },
+      { name: 'Semrush Keyword Magic Tool', url: 'https://www.semrush.com/analytics/keywordmagic/start', desc: 'Миллионы подсказок ключевых слов для SEO.', cat: 'keywords' },
+      { name: 'AnswerThePublic', url: 'https://answerthepublic.com/', desc: 'Визуализация вопросов и подсказок поиска для идей контента.', cat: 'keywords' },
+      { name: 'kwrds.ai', url: 'https://www.kwrds.ai', desc: 'Поиск ключевых слов и вопросов, которые задают люди.', cat: 'keywords' },
+      { name: 'Seoformulas', url: 'https://www.seoformulas.com', desc: 'Поиск ключевых слов и построение SEO-формул для ранжирования.', cat: 'keywords' },
+      { name: 'Serp Miner', url: 'https://serpminer.com/free-seo-tools', desc: 'Длинные ключевые слова через Autocomplete и объём поиска оптом.', cat: 'keywords' },
+      { name: 'KeySearch LSI', url: 'https://www.keysearch.co/tools/lsi-keywords-generator', desc: 'Генератор семантически связанных LSI-ключевых слов.', cat: 'keywords' },
+      { name: 'Keywordideas.xyz', url: 'https://keywordideas.xyz/', desc: 'Подсказки ключевых слов по URL или ключевому слову из Google.', cat: 'keywords' },
+      { name: 'Majestic', url: 'https://majestic.com/', desc: 'Узнайте, кто ссылается на ваш сайт.', cat: 'backlinks' },
+      { name: 'Monitor Backlinks', url: 'https://monitorbacklinks.com/', desc: 'Проверка хороших и плохих бэклинков у вас и конкурентов.', cat: 'backlinks' },
+      { name: 'Respona', url: 'https://respona.com/', desc: 'Инструмент для построения ссылок.', cat: 'backlinks' },
+      { name: 'BacklinkGPT', url: 'https://www.backlinkgpt.com/', desc: 'AI-платформа для поиска перспектив и персонализированных сообщений.', cat: 'backlinks' },
+      { name: 'YouLinker', url: 'https://youlinker.pro/', desc: 'Размещение продукта в множестве каталогов.', cat: 'backlinks' },
+      { name: 'BacklinkScan', url: 'https://backlinkscan.com/', desc: 'Проверка обратных ссылок: просто и мощно.', cat: 'backlinks' },
+      { name: 'Clearscope', url: 'https://www.clearscope.io/', desc: 'Платформа оптимизации контента для органического трафика.', cat: 'content' },
+      { name: 'SurferSEO', url: 'https://surferseo.com/', desc: 'SEO-воркфлоу для роста трафика и видимости.', cat: 'content' },
+      { name: 'NeuronWriter', url: 'https://neuronwriter.com/', desc: 'Оптимизация контента под требования поисковиков.', cat: 'content' },
+      { name: 'ContentSwift', url: 'https://github.com/hilmanski/contentswift', desc: 'Open source: исследование и оптимизация контента для SEO.', cat: 'content' },
+      { name: 'Market Muse', url: 'https://www.marketmuse.com/', desc: 'AI-анализ сайта для планирования контента.', cat: 'content' },
+      { name: 'Frase.io', url: 'https://www.frase.io/', desc: 'Быстрое создание контента, который ранжируется в Google.', cat: 'content' },
+      { name: 'GrowthBar', url: 'https://www.growthbarseo.com/', desc: 'Написание и оптимизация SEO-контента для блога с AI.', cat: 'content' },
+      { name: 'LSIGraph', url: 'https://lsigraph.com/', desc: 'Создание SEO-контента и рост трафика.', cat: 'content' },
+      { name: 'Yoast SEO', url: 'https://yoast.com/', desc: 'Плагин WordPress для SEO постов и страниц.', cat: 'content' },
+      { name: 'SearchSocket', url: 'https://searchsocket.com/', desc: 'Бесплатный AI-инструмент с подсказками по соответствию рекомендациям Google.', cat: 'content' },
+      { name: 'BlogBud AI', url: 'https://blogbud.ai', desc: 'SEO-статьи и экспорт в WordPress, Webflow, Ghost, Shopify.', cat: 'content' },
+      { name: 'TailorTask', url: 'https://www.tailortask.ai/solutions/for-seo', desc: 'AI-агенты: внутренние ссылки, гостевые посты, создание статей.', cat: 'content' },
+      { name: 'Koala AI', url: 'https://koala.sh', desc: 'AI для SEO-контента, внутренних ссылок и entity-схем.', cat: 'content' },
+      { name: 'SERPrecon', url: 'https://www.serprecon.com/', desc: 'Оптимизация по семантическим метрикам и трекинг AI SOV.', cat: 'content' },
+      { name: 'TuxSEO', url: 'https://tuxseo.com/', desc: 'Автоматическое создание SEO-блога для бизнеса.', cat: 'content' },
+      { name: 'Hypertxt', url: 'https://hypertxt.ai', desc: 'Глубоко проработанный SEO/GEO-контент в духе Perplexity и Ahrefs.', cat: 'content' },
+      { name: 'AltTextLab', url: 'https://www.alttextlab.com/', desc: 'AI-генерация SEO- и доступных alt-текстов для изображений.', cat: 'content' },
+      { name: 'SearchAttention', url: 'https://searchattention.com', desc: 'Оптимизация под AI-поиск: Google AI Overview, Perplexity, SearchGPT.', cat: 'content' },
+      { name: 'GrackerAI', url: 'https://gracker.ai/', desc: 'AI для редакционного и программного SEO в B2B Cybersecurity SaaS.', cat: 'content' },
+      { name: 'SerpBear', url: 'https://docs.serpbear.com/', desc: 'Open source: отслеживание позиций в поиске.', cat: 'rank' },
+      { name: 'SERPWatcher', url: 'https://serpwatch.io/', desc: 'Продвинутый трекер позиций для маркетологов и агентств.', cat: 'rank' },
+      { name: 'AccuRanker', url: 'https://www.accuranker.com/', desc: 'Быстрый и точный трекер позиций.', cat: 'rank' },
+      { name: 'Nightwatch', url: 'https://nightwatch.io/', desc: 'Облачный SEO и аналитика с фокусом на позициях и отчётах.', cat: 'rank' },
+      { name: 'DAXRM Rank Tracker', url: 'https://www.daxrm.com/integrations/rank-tracker/', desc: 'Трекинг позиций по ключевым словам в реальном времени, локации и устройства.', cat: 'rank' },
+      { name: "That's Rank!", url: 'https://www.thatisrank.com/', desc: 'Мгновенный просмотр и отслеживание позиций сайта в Google.', cat: 'rank' },
+      { name: 'Google Search Console', url: 'https://search.google.com/search-console/about', desc: 'Бесплатный инструмент Google: мониторинг сайта в поиске.', cat: 'technical' },
+      { name: 'Bing Webmaster Tools', url: 'https://www.bing.com/webmasters/about', desc: 'Мониторинг в Bing, ключевые слова и рекомендации по техническому SEO.', cat: 'technical' },
+      { name: 'Yandex Webmaster', url: 'https://webmaster.yandex.com/', desc: 'Мониторинг в Яндексе: индексация, краул, запросы, рекомендации.', cat: 'technical' },
+      { name: 'Screaming Frog SEO Spider', url: 'https://www.screamingfrog.co.uk/seo-spider/#spider-features', desc: 'Краулер для аудита онсайт SEO и типичных проблем.', cat: 'technical' },
+      { name: 'SiteAnalyzer', url: 'https://site-analyzer.pro/', desc: 'Сканирование сайтов и детальная информация по страницам.', cat: 'technical' },
+      { name: 'Screpy', url: 'https://screpy.com/', desc: 'Все важные метрики сайта в одном месте.', cat: 'technical' },
+      { name: 'Sitebulb', url: 'https://sitebulb.com/', desc: 'Аудит сайтов для SEO-консультантов и агентств.', cat: 'technical' },
+      { name: 'Moz On-Page Grader', url: 'https://moz.com/tools/onpage-grader', desc: 'Оценка оптимизации отдельных страниц.', cat: 'technical' },
+      { name: 'BROWSEO', url: 'https://www.browseo.net', desc: 'Просмотр сайта глазами поисковой системы.', cat: 'technical' },
+      { name: 'linkok.com', url: 'https://linkok.com', desc: 'Современная проверка битых ссылок.', cat: 'technical' },
+      { name: 'Wizardstool', url: 'https://wizardstool.com/', desc: 'Проверка битых ссылок.', cat: 'technical' },
+      { name: 'SEOnaut', url: 'https://seonaut.org', desc: 'Open source: технический SEO-аудит.', cat: 'technical' },
+      { name: 'Siteliner', url: 'https://www.siteliner.com/', desc: 'Дубликаты контента, битые ссылки и другие проблемы качества.', cat: 'technical' },
+      { name: 'Black SEO Analyzer', url: 'https://github.com/sethblack/black-seo-analyzer', desc: 'Консольный инструмент для комплексного SEO-анализа и AI-ответов.', cat: 'technical' },
+      { name: 'Python SEO Analyzer', url: 'https://github.com/sethblack/python-seo-analyzer', desc: 'Анализ структуры и краула сайта, подсчёт слов, предупреждения по техническому SEO.', cat: 'technical' },
+      { name: 'SSR Checker', url: 'https://www.crawlably.com/ssr-checker/', desc: 'Проверка SSR: сравнение серверного и обычного рендера страницы.', cat: 'technical' },
+      { name: 'LibreCrawl', url: 'https://librecrawl.com/', desc: 'Бесплатный open source краулер с JS-рендерингом и профилированием памяти.', cat: 'technical' },
+      { name: 'BrightLocal', url: 'https://www.brightlocal.com/local-seo-tools/', desc: 'Платформа для мониторинга, аудита и улучшения локального SEO.', cat: 'local' },
+      { name: 'Whitespark', url: 'https://whitespark.ca/', desc: 'Всё для улучшения локального SEO.', cat: 'local' },
+      { name: 'LocalFalcon', url: 'https://www.localfalcon.com/', desc: 'Точный трекер локальных позиций.', cat: 'local' },
+      { name: 'Grid My Business', url: 'https://gridmybusiness.com/', desc: 'Быстрая оценка локальной видимости.', cat: 'local' },
+      { name: 'Moz Local', url: 'https://moz.com/products/local', desc: 'Локальное SEO и управление репутацией от Moz.', cat: 'local' },
+      { name: 'SEO Minion', url: 'https://chrome.google.com/webstore/detail/seo-minion/giihipjfimkajhlcilipnjeohabimjhi', desc: 'Он-страничный анализ, битые ссылки, превью в SERP и др.', cat: 'extensions' },
+      { name: 'SEOquake', url: 'https://www.seoquake.com/index.html', desc: 'Мощный SEO-набор в браузере.', cat: 'extensions' },
+      { name: 'Woorank', url: 'https://www.woorank.com/en/privacy', desc: 'Мгновенный анализ сайта и рекомендации по улучшению.', cat: 'extensions' },
+      { name: 'Keyword Surfer', url: 'https://surferseo.com/keyword-surfer-extension/', desc: 'Расширение Chrome для контента и ключевых слов.', cat: 'extensions' },
+      { name: 'MozBar', url: 'https://moz.com/products/pro/seo-toolbar', desc: 'Мгновенные метрики для любой страницы и SERP.', cat: 'extensions' },
+      { name: 'Ahrefs SEO Toolbar', url: 'https://chrome.google.com/webstore/detail/ahrefs-seo-toolbar-on-pag/hgmoccdbjhknikckedaaebbpdeebhiei', desc: 'Он-страничный отчёт, битые ссылки, редиректы, смена страны поиска.', cat: 'extensions' },
+      { name: 'Redirect Path', url: 'https://chrome.google.com/webstore/detail/redirect-path/aomidfkchockcldhbkggjokdkkebmdll?hl=en', desc: 'Проверка HTTP-заголовков и редиректов для SEO.', cat: 'extensions' },
+      { name: 'META SEO inspector', url: 'https://chrome.google.com/webstore/detail/meta-seo-inspector/ibkclpciafdglkjkcibmohobjkcfkaef?hl=en', desc: 'Просмотр метаданных страницы, ошибки и советы по исправлению.', cat: 'extensions' },
+      { name: 'Similarweb', url: 'https://chrome.google.com/webstore/detail/similarweb-traffic-rank-w/hoklmmgfnpapgjgcpechhaamimifchmp?hl=en', desc: 'Анализ сайта: позиция, трафик, источники и география.', cat: 'extensions' },
+      { name: 'TextOptimizer', url: 'https://chrome.google.com/webstore/detail/textoptimizer/fdbbkmpdjmpnebmdgbhcodhlafiicnkd', desc: 'Анализ SERP и таблицы намерений для улучшения текста.', cat: 'extensions' },
+      { name: 'SEO Search Simulator', url: 'https://chrome.google.com/webstore/detail/seo-search-simulator-by-n/edfjfgjklednkencfhnokmkajbgfhpon?hl=en', desc: 'Эмуляция поиска Google из любой локации и проверка позиции URL.', cat: 'extensions' },
+      { name: 'BuzzSumo', url: 'https://chrome.google.com/webstore/detail/buzzsumo/phpihcpfhciibkmlllgcjkbmhhpcaojc?hl=en', desc: 'Контент, ссылки и соцсети в одном расширении.', cat: 'extensions' },
+      { name: 'Google Lighthouse', url: 'https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk', desc: 'Отчёты и советы по SEO, скорости, доступности и др.', cat: 'extensions' },
+      { name: 'Checkbot', url: 'https://www.checkbot.io/', desc: 'Краул сотен страниц: 50+ проверок SEO, скорости и безопасности.', cat: 'extensions' },
+      { name: 'SEO Sidebar', url: 'https://chromewebstore.google.com/detail/seo-sidebar/gmmiickdcmghfpliaiefhjafccapgmpp', desc: 'Он-страничные SEO-данные в боковой панели и экспорт в отчёты.', cat: 'extensions' },
+      { name: 'ShotOG', url: 'https://github.com/nicepkg/shotog', desc: 'Open source API для OG-изображений на edge (~50ms) для соцсетей.', cat: 'social' },
+      { name: 'ogimg.xyz', url: 'https://ogimg.xyz/', desc: 'API для генерации Open Graph изображений: шаблоны, брендинг, авто-загрузка. Есть бесплатный тариф.', cat: 'social' },
+      { name: 'GTmetrix', url: 'https://gtmetrix.com/', desc: 'Анализ скорости сайта и рекомендации по производительности.', cat: 'misc' },
+      { name: 'Pingdom', url: 'https://tools.pingdom.com/', desc: 'Проверка времени загрузки и производительности сайта.', cat: 'misc' },
+      { name: 'DebugBear', url: 'https://www.debugbear.com/test/website-speed', desc: 'Анализ скорости страницы и отчёт по Google CrUX.', cat: 'misc' },
+      { name: 'GEO/AEO Tracker', url: 'https://github.com/danishashko/geo-aeo-tracker', desc: 'Open source дашборд видимости в AI: упоминания бренда, цитирования, BYOK, self-hosted.', cat: 'misc' }
+    ];
+
+    const searchEl = document.getElementById('search');
+    const cardsEl = document.getElementById('cards');
+    const counterEl = document.getElementById('counter');
+    const toTopEl = document.getElementById('toTop');
+    const sidebarFilters = document.getElementById('sidebar-filters');
+    const toolbarFilters = document.getElementById('toolbar-filters');
+
+    let currentCategory = 'all';
+    let searchQuery = '';
+
+    function normalize(s) {
+      return (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function filterTools() {
+      const q = normalize(searchQuery);
+      const cat = currentCategory;
+      return TOOLS.filter(t => {
+        const matchCat = cat === 'all' || t.cat === cat;
+        const matchSearch = !q || normalize(t.name).includes(q) || normalize(t.desc).includes(q);
+        return matchCat && matchSearch;
+      });
+    }
+
+    function renderFilters(container, isToolbar) {
+      const entries = Object.entries(CATEGORIES);
+      container.innerHTML = entries.map(([key, label]) => {
+        const active = currentCategory === key ? ' active' : '';
+        return `<button type="button" class="filter-btn${active}" data-cat="${key}">${label}</button>`;
+      }).join('');
+      container.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentCategory = btn.dataset.cat;
+          document.querySelectorAll('.filter-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.cat === currentCategory);
+          });
+          render();
+        });
+      });
+    }
+
+    function renderCards(list) {
+      if (list.length === 0) {
+        cardsEl.innerHTML = '<p class="no-results">По вашему запросу ничего не найдено. Измените поиск или категорию.</p>';
+        return;
+      }
+      cardsEl.innerHTML = list.map(t => `
+        <article class="card" data-category="${t.cat}">
+          <h3 class="card-title"><a href="${t.url}" target="_blank" rel="noopener">${escapeHtml(t.name)}</a></h3>
+          <p class="card-desc">${escapeHtml(t.desc)}</p>
+          <span class="card-badge">${escapeHtml(CATEGORIES[t.cat])}</span>
+        </article>
+      `).join('');
+    }
+
+    function escapeHtml(s) {
+      const div = document.createElement('div');
+      div.textContent = s;
+      return div.innerHTML;
+    }
+
+    function render() {
+      const list = filterTools();
+      counterEl.innerHTML = 'Найдено: <strong>' + list.length + '</strong>';
+      renderCards(list);
+    }
+
+    searchEl.addEventListener('input', () => {
+      searchQuery = searchEl.value.trim();
+      render();
+    });
+
+    window.addEventListener('scroll', () => {
+      toTopEl.classList.toggle('visible', window.scrollY > 400);
+    });
+
+    toTopEl.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    renderFilters(sidebarFilters, false);
+    renderFilters(toolbarFilters, true);
+    render();
+  </script>
+</body>
+</html>
